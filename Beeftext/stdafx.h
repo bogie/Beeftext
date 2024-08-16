@@ -15,6 +15,6 @@
 #include <QtNetwork>
 #include <QtGui>
 #include <QtCore>
-
+#include <qt_windows.h>
 
 #endif // BEEFTEXT_STDAFX_H
