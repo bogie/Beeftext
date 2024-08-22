@@ -223,8 +223,11 @@
       <Filter>Snippet</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardMapper.cpp" />
-    <ClCompile Include="Combo\comboformeditdialog.cpp">
+    <ClCompile Include="Combo\FormEditDialog.cpp">
       <Filter>Combo</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogs\VariableFormDialog.cpp">
+      <Filter>Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -476,8 +479,11 @@
     <QtMoc Include="Clipboard\ClipboardManagerLegacy.h">
       <Filter>Clipboard</Filter>
     </QtMoc>
-    <QtMoc Include="Combo\comboformeditdialog.h">
+    <QtMoc Include="Combo\FormEditDialog.h">
       <Filter>Combo</Filter>
+    </QtMoc>
+    <QtMoc Include="Dialogs\VariableFormDialog.h">
+      <Filter>Dialogs</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -513,6 +519,9 @@
     </QtUic>
     <QtUic Include="Combo\ComboFormEditDialog.ui">
       <Filter>Combo</Filter>
+    </QtUic>
+    <QtUic Include="Dialogs\VariableFormDialog.ui">
+      <Filter>Dialogs</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

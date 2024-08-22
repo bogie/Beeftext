@@ -27,6 +27,7 @@ enum class ECaseChange {
 
 QString const kCustomDateTimeVariable = "dateTime:"; ///< The dateTime variable.
 QString const kInputVariable = "input:"; ///< The input variable.
+QString const kFormVariable = "form:"; ///< The form variable
 QString const kEnvVarVariable = "envVar:"; ///< The envVar variable.
 QString const kPowershellVariable = "powershell:"; ///< The execute variable.
 
@@ -383,6 +384,16 @@ QString evaluateVariable(QString const &variable, QSet<QString> const &forbidden
 
     if (variable.startsWith(kInputVariable))
         return evaluateInputVariable(variable, knownInputVariables, outCancelled);
+
+
+
+    if (variable.startsWith(kFormVariable)) {
+        qDebug() << "evaluateVariable: found variable " << variable;
+        QString const description = variable.right(variable.size() - kFormVariable.size());
+        if (knownInputVariables.contains(description))
+            return knownInputVariables[description];
+        else return QString();
+    }
 
     if (variable.startsWith(kEnvVarVariable))
         return evaluateEnvVarVariable(variable);

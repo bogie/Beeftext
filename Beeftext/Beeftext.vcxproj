@@ -287,7 +287,7 @@
     <ClCompile Include="Combo\Combo.cpp" />
     <ClCompile Include="Combo\ComboDialog.cpp" />
     <ClCompile Include="Combo\ComboEditor.cpp" />
-    <ClCompile Include="Combo\comboformeditdialog.cpp" />
+    <ClCompile Include="Combo\FormEditDialog.cpp" />
     <ClCompile Include="Combo\ComboFrame.cpp" />
     <ClCompile Include="Combo\ComboImportDialog.cpp" />
     <ClCompile Include="Combo\ComboList.cpp" />
@@ -299,6 +299,7 @@
     <ClCompile Include="Combo\MatchingMode.cpp" />
     <ClCompile Include="Dialogs\AboutDialog.cpp" />
     <ClCompile Include="Dialogs\ShortcutDialog.cpp" />
+    <ClCompile Include="Dialogs\VariableFormDialog.cpp" />
     <ClCompile Include="Dialogs\VariableInputDialog.cpp" />
     <ClCompile Include="Emoji\Emoji.cpp" />
     <ClCompile Include="Emoji\EmojiList.cpp" />
@@ -350,11 +351,12 @@
   <ItemGroup>
     <ClInclude Include="AutoStart.h" />
     <ClInclude Include="Combo\CaseSensitivity.h" />
-    <QtMoc Include="Combo\comboformeditdialog.h" />
+    <QtMoc Include="Combo\FormEditDialog.h" />
     <ClInclude Include="Combo\MatchingMode.h" />
     <QtMoc Include="Dialogs\AboutDialog.h" />
     <QtMoc Include="Dialogs\ShortcutDialog.h" />
     <QtMoc Include="Dialogs\VariableInputDialog.h" />
+    <QtMoc Include="Dialogs\VariableFormDialog.h" />
     <ClInclude Include="Emoji\Emoji.h" />
     <ClInclude Include="Emoji\EmojiList.h" />
     <ClInclude Include="Emoji\EmojiManager.h" />
@@ -491,6 +493,7 @@
     <QtUic Include="Combo\ComboFormEditDialog.ui" />
     <QtUic Include="Dialogs\AboutDialog.ui" />
     <QtUic Include="Dialogs\ShortcutDialog.ui" />
+    <QtUic Include="Dialogs\VariableFormDialog.ui" />
     <QtUic Include="MainWindow.ui">
     </QtUic>
   </ItemGroup>

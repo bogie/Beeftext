@@ -20,6 +20,7 @@
 #include "BeeftextConstants.h"
 #include "XMiLib/Exception.h"
 #include <utility>
+#include <Dialogs/VariableFormDialog.h>
 
 
 using namespace xmilib;
@@ -134,7 +135,7 @@ Combo::Combo(QJsonObject const &object, qint32 formatVersion, GroupList const &g
     if (object.contains(kFormArray)) {
         QJsonArray formData = object[kFormArray].toArray();
         for (QJsonValue v : formData) {
-            ComboFormResult res;
+            FormResult res;
             res.name = v.toObject().value("name").toString();
             res.type = v.toObject().value("type").toString();
             res.choices = v.toObject().value("choices").toString().split("\n");
@@ -419,6 +420,7 @@ bool Combo::performSubstitution(bool triggeredByPicker) {
     bool cancelled = false;
     QMap<QString, QString> knownInputVariables;
     QSet<QString> const forbiddenSubcombos;
+
     QString newText = this->evaluatedSnippet(cancelled, forbiddenSubcombos, knownInputVariables);
     if (cancelled)
         return false;
@@ -485,7 +487,7 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
         result.insert(kPropGroup, group_->uuid().toString());
     QJsonArray formData;
     
-    for (ComboFormResult res : formList_) {
+    for (FormResult res : formList_) {
         QJsonObject formEntry;
         formEntry.insert("name", res.name);
         formEntry.insert("type", res.type);
@@ -505,12 +507,12 @@ void Combo::changeUuid() {
     uuid_ = QUuid::createUuid();
 }
 
-QList<ComboFormResult> Combo::getFormList() const
+QList<FormResult> Combo::getFormList() const
 {
     return formList_;
 }
 
-void Combo::setFormList(QList<ComboFormResult> const formList)
+void Combo::setFormList(QList<FormResult> const formList)
 {
     formList_ = formList;
 }
@@ -585,6 +587,28 @@ QString Combo::evaluatedSnippet(bool &outCancelled, QSet<QString> const &forbidd
     outCancelled = false;
     QString remainingText = snippet_;
     QString result;
+
+    // evaluate form data first and add to knownInputVariables
+    QRegularExpressionMatchIterator fMatch = constants::kFormRegExp.globalMatch(remainingText);
+
+
+    // Maybe speed this up by simply passing the entire formList_ whether or not it is used in the snippet
+    QList<FormResult> formRes;
+    while (fMatch.hasNext()) {
+        QRegularExpressionMatch match = fMatch.next();
+        QString variable = match.captured(1);
+        QString const description = variable.right(variable.size() - QString("form:").size());
+        for (FormResult r : formList_) {
+            if (r.name == description) {
+                formRes.append(r);
+            }
+        }
+    }
+
+    // This must run before any other substitutions as it overwirtes knownInputVariables
+    if (VariableFormDialog::run(displayName(), formRes, knownInputVariables)) {
+        qDebug() << "form result knownInputVariables: " << knownInputVariables;
+    }
 
     while (true) {
         QRegularExpressionMatch match = constants::kVariableRegExp.match(remainingText);

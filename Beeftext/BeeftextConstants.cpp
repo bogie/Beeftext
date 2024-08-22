@@ -27,6 +27,7 @@ QString const kKeyVariableRegExpStr(R"(#{key:(\w+)(?>:(\d+))?})");
 QString const kShortcutVariableRegExpStr(R"(#{shortcut:(.+)})");
 QString const kDelayVariableRegExpStr(R"(#{delay:(\d+)})");
 QRegularExpression const kVariableRegExp(R"(#\{((.*?)(?<!\\))\})");
+QRegularExpression const kFormRegExp(R"(#\{((form.*?)(?<!\\))\})");
 
 
 } // namespace constants

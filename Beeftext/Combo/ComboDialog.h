@@ -13,7 +13,7 @@
 #include "ui_ComboDialog.h"
 #include "ComboKeywordValidator.h"
 #include "Combo/Combo.h"
-#include "Combo/comboformeditdialog.h"
+#include "Combo/FormEditDialog.h"
 
 
 //****************************************************************************************************************************************************
@@ -34,13 +34,14 @@ public: // member functions
 
 private: // member functions
     bool checkAndReportInvalidCombo(); ///< Check the keyword against existing combos and report conflicts
-    void fillFormList(QList<ComboFormResult> formList_);
+    void fillFormList(QList<FormResult> formList_);
 
 private slots:
     void onActionOk(); ///< Slot for the 'OK' action
     void onActionNewGroup(); ///< Slot for the 'New Group' action
     void updateGui() const; ///< Update the GUI state
     void onFormInputCustomContextMenuRequested(const QPoint& pos);
+    void onFormInputItemDoubleClicked(QListWidgetItem* item);
     void onAddFormInput();
     void onModifyFormInput(QListWidgetItem *item);
     void onDeleteFormInput(QListWidgetItem* item);
