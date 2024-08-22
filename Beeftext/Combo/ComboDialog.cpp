@@ -110,6 +110,7 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     ui_.comboEditor->setPlainText(combo->snippet());
     ui_.editDescription->setPlainText(combo->description());
     ui_.labelVariables->setText(variablesLabel());
+    fillFormList(combo->getFormList());
     this->updateGui();
     connect(ui_.editKeyword, &QLineEdit::textChanged, this, &ComboDialog::updateGui);
     connect(ui_.comboEditor, &ComboEditor::textChanged, this, &ComboDialog::updateGui);
@@ -118,6 +119,7 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     connect(ui_.buttonCancel, &QPushButton::clicked, this, &ComboDialog::reject);
     connect(ui_.buttonNewGroup, &QPushButton::clicked, this, &ComboDialog::onActionNewGroup);
     connect(new QShortcut(QKeySequence("Ctrl+Return"), this), &QShortcut::activated, this, &ComboDialog::onActionOk);
+    connect(ui_.formInputWidget, &QListWidget::customContextMenuRequested, this, &ComboDialog::onFormInputCustomContextMenuRequested);
 }
 
 
@@ -167,6 +169,17 @@ bool ComboDialog::checkAndReportInvalidCombo() {
         .arg(conflictCount > 1 ? multipleConflictStr : singleConflictStr), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 }
 
+void ComboDialog::fillFormList(QList<ComboFormResult> formList_)
+{
+    for (ComboFormResult res : formList_) {
+        QListWidgetItem* item = new QListWidgetItem(res.name);
+        item->setData(ComboFormResult::ItemType::FORM_TYPE, res.type);
+        item->setData(ComboFormResult::ItemType::FORM_NAME, res.name);
+        item->setData(ComboFormResult::ItemType::FORM_CHOICES, res.choices);
+        ui_.formInputWidget->addItem(item);
+    }
+}
+
 
 //****************************************************************************************************************************************************
 // 
@@ -190,6 +203,16 @@ void ComboDialog::onActionOk() {
     combo_->setKeyword(keyword);
     combo_->setSnippet(ui_.comboEditor->plainText());
     combo_->setDescription(ui_.editDescription->toPlainText());
+    QList<ComboFormResult> formList_;
+    for (int i = 0; i < ui_.formInputWidget->count(); i++) {
+        QListWidgetItem* item = ui_.formInputWidget->item(i);
+        ComboFormResult res;
+        res.name = item->data(ComboFormResult::ItemType::FORM_NAME).toString();
+        res.type = item->data(ComboFormResult::ItemType::FORM_TYPE).toString();
+        res.choices = item->data(ComboFormResult::ItemType::FORM_CHOICES).toStringList();
+        formList_.append(res);
+    }
+    combo_->setFormList(formList_);
     this->accept();
 }
 
@@ -216,4 +239,73 @@ void ComboDialog::updateGui() const {
                            (!ui_.comboEditor->plainText().isEmpty()) && ui_.comboGroup->currentGroup();
     ui_.buttonOk->setEnabled(canAccept);
     ui_.editName->setPlaceholderText(Combo::placeholderName(ui_.editKeyword->text(), ui_.comboEditor->plainText()));
+}
+
+void ComboDialog::onFormInputCustomContextMenuRequested(const QPoint& pos) {
+    qDebug() << "Custom Context menu";
+
+    QMenu contextMenu(tr("Context menu"), this);
+
+    // Todo: check if we have clicked on an item and add modify/delete functions
+    QListWidgetItem* item = ui_.formInputWidget->itemAt(pos);
+
+    QAction* addAction = new QAction("Add new form input", this);
+    connect(addAction, &QAction::triggered, this, &ComboDialog::onAddFormInput);
+    contextMenu.addAction(addAction);
+
+    if (item == nullptr) {
+        qDebug() << "no item";
+    }
+    else {
+        QAction *modifyAction = new QAction("Modify", this);
+        QAction* deleteAction = new QAction("Delete", this);
+
+        connect(modifyAction, &QAction::triggered, this, [=]() {
+            onModifyFormInput(item);
+            });
+
+        connect(deleteAction, &QAction::triggered, this, [=]() {
+            onDeleteFormInput(item);
+            });
+        contextMenu.addAction(modifyAction);
+        contextMenu.addAction(deleteAction);
+    }
+
+    contextMenu.exec(ui_.formInputWidget->viewport()->mapToGlobal(pos));
+}
+
+void ComboDialog::onAddFormInput() {
+    qDebug() << "onAddFormInput";
+    // Open ComboFormEditDialog
+    ComboFormEditDialog dg = ComboFormEditDialog(this);
+
+    if (dg.exec() == QDialog::Accepted) {
+        ComboFormResult* res = dg.getResult();
+        qDebug() << "new form input: " << res->name << res->type << res->choices;
+        QListWidgetItem* item = new QListWidgetItem(res->name);
+        item->setData(ComboFormResult::ItemType::FORM_TYPE, res->type);
+        item->setData(ComboFormResult::ItemType::FORM_NAME, res->name);
+        item->setData(ComboFormResult::ItemType::FORM_CHOICES, res->choices);
+        ui_.formInputWidget->addItem(item);
+    }
+}
+
+void ComboDialog::onModifyFormInput(QListWidgetItem *item)
+{
+    qDebug() << "modify form input for item: " << item->data(ComboFormResult::ItemType::FORM_NAME).toString();
+    ComboFormResult* cr = new ComboFormResult(item->data(ComboFormResult::ItemType::FORM_NAME).toString(), item->data(ComboFormResult::ItemType::FORM_TYPE).toString(), item->data(ComboFormResult::ItemType::FORM_CHOICES).toStringList());
+    ComboFormEditDialog *dg = new ComboFormEditDialog(cr, this);
+    if (dg->exec() == QDialog::Accepted) {
+        item->setText(cr->name);
+        item->setData(ComboFormResult::ItemType::FORM_TYPE, cr->type);
+        item->setData(ComboFormResult::ItemType::FORM_NAME, cr->name);
+        item->setData(ComboFormResult::ItemType::FORM_CHOICES, cr->choices);
+    }
+    delete cr;
+}
+
+void ComboDialog::onDeleteFormInput(QListWidgetItem* item)
+{
+    qDebug() << "deleting item: " << item->data(ComboFormResult::ItemType::FORM_NAME);
+    delete item;
 }

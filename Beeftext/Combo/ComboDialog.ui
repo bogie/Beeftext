@@ -13,138 +13,173 @@
   <property name="windowTitle">
    <string notr="true">#Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
    <item>
-    <layout class="QGridLayout" name="gridLayout" rowstretch="4,0,0,0,1">
-     <item row="1" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0">
-       <property name="spacing">
-        <number>9</number>
-       </property>
-       <item>
-        <widget class="QLineEdit" name="editKeyword"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+     <item>
+      <layout class="QGridLayout" name="gridLayout" rowstretch="4,0,0,0,1" columnstretch="0,0">
+       <item row="2" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="GroupComboBox" name="comboGroup">
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="buttonNewGroup">
+           <property name="text">
+            <string>&amp;New</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelMatching">
+           <property name="text">
+            <string>Matching</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboMatching">
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item>
-        <widget class="QLabel" name="labelCaseSensitivity">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelSnippet">
          <property name="text">
-          <string>Case sensitivity</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboCaseSensitivity"/>
-       </item>
-      </layout>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="labelName">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="ComboEditor" name="comboEditor" native="true">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="labelName_2">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="labelGroup">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Group&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>9</number>
-       </property>
-       <item>
-        <widget class="GroupComboBox" name="comboGroup">
-         <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToContents</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonNewGroup">
-         <property name="text">
-          <string>&amp;New</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelMatching">
-         <property name="text">
-          <string>Matching</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Snippet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop|Qt::AlignmentFlag::AlignTrailing</set>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QComboBox" name="comboMatching">
-         <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToContents</enum>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelKeyword">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Keyword&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="editName"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="ComboEditor" name="comboEditor" native="true">
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::StrongFocus</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelGroup">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Group&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelName_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0">
+         <property name="spacing">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="editKeyword"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelCaseSensitivity">
+           <property name="text">
+            <string>Case sensitivity</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboCaseSensitivity"/>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPlainTextEdit" name="editDescription">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelName">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item row="4" column="1">
-      <widget class="QPlainTextEdit" name="editDescription">
-       <property name="tabChangesFocus">
-        <bool>true</bool>
+     <item>
+      <widget class="QListWidget" name="formInputWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="editName"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelSnippet">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Snippet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+       <property name="contextMenuPolicy">
+        <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="labelKeyword">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Keyword&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <property name="editTriggers">
+        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+       </property>
+       <property name="showDropIndicator" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="defaultDropAction">
+        <enum>Qt::DropAction::IgnoreAction</enum>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
        </property>
       </widget>
      </item>
@@ -180,7 +215,7 @@
      <item>
       <spacer name="spacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

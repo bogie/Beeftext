@@ -14,6 +14,7 @@
 #include "Group/GroupList.h"
 #include "MatchingMode.h"
 #include "CaseSensitivity.h"
+#include "comboformeditdialog.h"
 #include <memory>
 #include <vector>
 
@@ -73,6 +74,8 @@ public: // member functions
     bool performSubstitution(bool triggeredByPicker); ///< Perform the combo substitution
     QJsonObject toJsonObject(bool includeGroup) const; ///< Serialize the combo in a JSon object
     void changeUuid(); ///< Get a new Uuid for the combo
+    QList<ComboFormResult> getFormList() const; ///< Get the possible form combos
+    void setFormList(QList<ComboFormResult> const formList);
 
 public: // static functions
     static SpCombo create(QString const &name = QString(), QString const &keyword = QString(),
@@ -99,6 +102,7 @@ private: // data member
     QDateTime modificationDateTime_; ///< The date/time of the last modification of the combo
     QDateTime lastUseDateTime_; ///< The last use date/time
     bool enabled_ { true }; ///< Is the combo enabled
+    QList<ComboFormResult> formList_;
 };
 
 

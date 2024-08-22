@@ -47,6 +47,7 @@ QString const kPropEnabled = "enabled"; ///< The JSON property name for the enab
 QString const kCursorVariable = "#{cursor}"; ///< The cursor position variable.
 qint32 const kPlaceholderMaxLength = 50; ///< The maximum length of the placeholder name.
 QString const kPlaceholderElision = "..."; ///< The elision text for placeholder (used if placeholder name is too long.
+QString const kFormArray = "formData"; ///< The JSON property name for form data
 
 
 } // anonymous namespace
@@ -129,6 +130,17 @@ Combo::Combo(QJsonObject const &object, qint32 formatVersion, GroupList const &g
     } else
         matchingMode_ = static_cast<EMatchingMode>(qBound<qint32>(0, object[kPropMatchingMode].toInt(
             qint32(EMatchingMode::Strict)), static_cast<qint32>(EMatchingMode::Count) - 1));
+
+    if (object.contains(kFormArray)) {
+        QJsonArray formData = object[kFormArray].toArray();
+        for (QJsonValue v : formData) {
+            ComboFormResult res;
+            res.name = v.toObject().value("name").toString();
+            res.type = v.toObject().value("type").toString();
+            res.choices = v.toObject().value("choices").toString().split("\n");
+            formList_.append(res);
+        }
+    }
 
     // because we parse an older format version, we update the modification date, as the combo manager will save
     // the file to update it to the latest format
@@ -471,6 +483,17 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
     result.insert(kPropEnabled, enabled_);
     if (includeGroup && group_)
         result.insert(kPropGroup, group_->uuid().toString());
+    QJsonArray formData;
+    
+    for (ComboFormResult res : formList_) {
+        QJsonObject formEntry;
+        formEntry.insert("name", res.name);
+        formEntry.insert("type", res.type);
+        formEntry.insert("choices", res.choices.join("\n"));
+        formData.append(formEntry);
+    }
+
+    result.insert(kFormArray, formData);
     return result;
 }
 
@@ -480,6 +503,16 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
 //****************************************************************************************************************************************************
 void Combo::changeUuid() {
     uuid_ = QUuid::createUuid();
+}
+
+QList<ComboFormResult> Combo::getFormList() const
+{
+    return formList_;
+}
+
+void Combo::setFormList(QList<ComboFormResult> const formList)
+{
+    formList_ = formList;
 }
 
 

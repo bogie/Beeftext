@@ -287,6 +287,7 @@
     <ClCompile Include="Combo\Combo.cpp" />
     <ClCompile Include="Combo\ComboDialog.cpp" />
     <ClCompile Include="Combo\ComboEditor.cpp" />
+    <ClCompile Include="Combo\comboformeditdialog.cpp" />
     <ClCompile Include="Combo\ComboFrame.cpp" />
     <ClCompile Include="Combo\ComboImportDialog.cpp" />
     <ClCompile Include="Combo\ComboList.cpp" />
@@ -349,6 +350,7 @@
   <ItemGroup>
     <ClInclude Include="AutoStart.h" />
     <ClInclude Include="Combo\CaseSensitivity.h" />
+    <QtMoc Include="Combo\comboformeditdialog.h" />
     <ClInclude Include="Combo\MatchingMode.h" />
     <QtMoc Include="Dialogs\AboutDialog.h" />
     <QtMoc Include="Dialogs\ShortcutDialog.h" />
@@ -485,6 +487,8 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="Combo\ComboFormDialog.ui" />
+    <QtUic Include="Combo\ComboFormEditDialog.ui" />
     <QtUic Include="Dialogs\AboutDialog.ui" />
     <QtUic Include="Dialogs\ShortcutDialog.ui" />
     <QtUic Include="MainWindow.ui">

@@ -223,6 +223,9 @@
       <Filter>Snippet</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardMapper.cpp" />
+    <ClCompile Include="Combo\comboformeditdialog.cpp">
+      <Filter>Combo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -473,6 +476,9 @@
     <QtMoc Include="Clipboard\ClipboardManagerLegacy.h">
       <Filter>Clipboard</Filter>
     </QtMoc>
+    <QtMoc Include="Combo\comboformeditdialog.h">
+      <Filter>Combo</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Picker\PickerWindow.ui">
@@ -501,6 +507,12 @@
     </QtUic>
     <QtUic Include="Preferences\Panes\PrefPaneAdvanced.ui">
       <Filter>Preferences\Panes</Filter>
+    </QtUic>
+    <QtUic Include="Combo\ComboFormDialog.ui">
+      <Filter>Combo</Filter>
+    </QtUic>
+    <QtUic Include="Combo\ComboFormEditDialog.ui">
+      <Filter>Combo</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
