@@ -1,19 +1,33 @@
 #include "stdafx.h"
 #include "VariableFormDialog.h"
 
-VariableFormDialog::VariableFormDialog(QList<FormResult> formList)
-	: QDialog(nullptr)
+VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
+	: QDialog(nullptr), formList(formList)
 {
 	ui.setupUi(this);
 
-	for (FormResult result : formList) {
-		QLineEdit* edit = new QLineEdit(this);
-		QLabel* label = new QLabel(result.name,this);
+	for (FormResult result : formList.values()) {
+		QLabel* label = new QLabel(result.name, this);
 		QHBoxLayout* layout = new QHBoxLayout(this);
 		layout->addWidget(label);
-		layout->addWidget(edit);
+
+		if (result.type == "text") {
+			QLineEdit* edit = new QLineEdit(this);
+			layout->addWidget(edit);
+			formWidgets.insert(result.name, edit);
+		} else if(result.type == "choice") {
+			QComboBox* combo = new QComboBox(this);
+			combo->addItems(result.choices);
+			layout->addWidget(combo);
+			formWidgets.insert(result.name, combo);
+		} else {
+			QLineEdit* edit = new QLineEdit(this);
+			layout->addWidget(edit);
+			formWidgets.insert(result.name, edit);
+		}
+		
 		ui.formInputsLayout->addLayout(layout);
-		formWidgets.insert(result.name,edit);
+		
 	}
 
 	this->show();
@@ -33,14 +47,22 @@ QMap<QString, QString> VariableFormDialog::getFormVariables()
 {
 
 	for (QString variable : formWidgets.keys()) {
-		QLineEdit* edit = formWidgets.value(variable);
-		formVariables.insert(variable, edit->text());
+		FormResult res = formList.value(variable);
+
+		qDebug() << "type of widget is: " << formWidgets.value(variable)->objectName();
+
+		if (QLineEdit* edit = qobject_cast<QLineEdit*>(formWidgets.value(variable))) {
+			formVariables.insert(variable, edit->text());
+		}
+		else if (QComboBox* box = qobject_cast<QComboBox*>(formWidgets.value(variable))) {
+			formVariables.insert(variable, box->currentText());
+		}
 	}
 
 	return formVariables;
 }
 
-bool VariableFormDialog::run(QString const& description, QList<FormResult> formList, QMap<QString, QString>& outFormVariables)
+bool VariableFormDialog::run(QString const& description, QMap<QString, FormResult> formList, QMap<QString, QString>& outFormVariables)
 {
 	VariableFormDialog dlg(formList);
 	if (Accepted != dlg.exec())

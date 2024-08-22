@@ -21,6 +21,7 @@
 !define REGISTRY_UNINSTALLER_FOLDER Software\Microsoft\Windows\CurrentVersion\Uninstall
 !define OUTPUT_DIR _build
 !define RESOURCES_DIR "Resources"
+!define QTDIR "C:\Qt\6.8.0\msvc2022_64"
 !define VC_DLL_DIR "..\Vendor\VCRuntime"
 !define VS_DEVENV_PATH "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.com"
 !define LICENSE_FILE_NAME "LICENSE"
@@ -149,7 +150,7 @@ FunctionEnd
 # Launch Beeftext at the end of the installer, as the standard user
 #########################################################################
 Function LaunchBeeftext
-ShellExecAsUser::ShellExecAsUser "open" '"$INSTDIR\${APP_NAME}.exe"'
+	ShellExecAsUser::ShellExecAsUser "open" '"$INSTDIR\${APP_NAME}.exe"'
 FunctionEnd
 
 
@@ -169,12 +170,12 @@ setOutPath $INSTDIR
 # copy file
 file "${EXE_SRC_DIR}\${APP_NAME}.exe"
 file "..\README.md"
-file "$%QTDIR%\..\..\Tools\OpenSSL\Win_x64\bin\libcrypto-1_1-x64.dll"
-file "$%QTDIR%\..\..\Tools\OpenSSL\Win_x64\bin\libssl-1_1-x64.dll"
-file "$%QTDIR%\bin\Qt6Core.dll"
-file "$%QTDIR%\bin\Qt6Gui.dll"
-file "$%QTDIR%\bin\Qt6Widgets.dll"
-file "$%QTDIR%\bin\Qt6Network.dll"
+file "C:\Qt\Tools\OpenSSLv3\Win_x64\bin\libcrypto-3-x64.dll"
+file "C:\Qt\Tools\OpenSSLv3\Win_x64\bin\libssl-3-x64.dll"
+file "C:\Qt\6.8.0\msvc2022_64\bin\Qt6Core.dll"
+file "C:\Qt\6.8.0\msvc2022_64\bin\Qt6Gui.dll"
+file "C:\Qt\6.8.0\msvc2022_64\bin\Qt6Widgets.dll"
+file "C:\Qt\6.8.0\msvc2022_64\bin\Qt6Network.dll"
 file "${VC_DLL_DIR}\msvcp140.dll"
 file "${VC_DLL_DIR}\msvcp140_1.dll"
 file "${VC_DLL_DIR}\msvcp140_2.dll"
@@ -182,15 +183,15 @@ file "${VC_DLL_DIR}\vcruntime140.dll"
 file "${VC_DLL_DIR}\vcruntime140_1.dll"
 file "${VC_DLL_DIR}\msvcr100.dll"
 setOutPath $INSTDIR\platforms
-file "$%QTDIR%\plugins\platforms\qwindows.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\platforms\qwindows.dll"
 setOutPath $INSTDIR\styles
-file "$%QTDIR%\plugins\styles\qwindowsvistastyle.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\styles\qmodernwindowsstyle.dll"
 setOutPath $INSTDIR\imageformats
-file "$%QTDIR%\plugins\imageformats\qico.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\imageformats\qico.dll"
 setOutPath $INSTDIR\tls
-file "$%QTDIR%\plugins\tls\qcertonlybackend.dll"
-file "$%QTDIR%\plugins\tls\qopensslbackend.dll"
-file "$%QTDIR%\plugins\tls\qschannelbackend.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\tls\qcertonlybackend.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\tls\qopensslbackend.dll"
+file "C:\Qt\6.8.0\msvc2022_64\plugins\tls\qschannelbackend.dll"
 setOutPath $INSTDIR\translations\fr_FR
 file "${EXE_SRC_DIR}\translations\fr_FR\beeftext_fr_FR.qm"
 file "${EXE_SRC_DIR}\translations\fr_FR\qtbase_fr_FR.qm"
@@ -266,29 +267,29 @@ FunctionEnd
 # Uninstaller
 #####################################
 
-Section "Uninstall"
+Section Uninstall
 
-# Remove application files and folders
-SetShellVarContext all
+	# Remove application files and folders
+	SetShellVarContext all
 
-call un.closeRunningInstance
+	call un.closeRunningInstance
 
-# Remove program directory
-RMDir /r "$INSTDIR"
+	# Remove program directory
+	RMDir /r "$INSTDIR"
 
-# Remove registry keys that are used for the uninstaller
-DeleteRegKey HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}"
-DeleteRegValue HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "AppExePath"
-DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${APP_FANCY_NAME}" # this autostart key may have been created by the application itself
+	# Remove registry keys that are used for the uninstaller
+	DeleteRegKey HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}"
+	DeleteRegValue HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "AppExePath"
+	DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${APP_FANCY_NAME}" # this autostart key may have been created by the application itself
 
-#DeleteRegKey /ifempty HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" # The following registry key should be clean if the user check a box in the uninstaller
+	#DeleteRegKey /ifempty HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" # The following registry key should be clean if the user check a box in the uninstaller
 
-# Remove Start menu entries, if any
-Delete "$SMPROGRAMS\${APP_FANCY_NAME}\*.*"
-RMDir "$SMPROGRAMS\${APP_FANCY_NAME}"
+	# Remove Start menu entries, if any
+	Delete "$SMPROGRAMS\${APP_FANCY_NAME}\*.*"
+	RMDir "$SMPROGRAMS\${APP_FANCY_NAME}"
 
-# Remove Desktop shortcut, if any
-SetShellVarContext current
-Delete "$DESKTOP\${APP_FANCY_NAME}.lnk"
+	# Remove Desktop shortcut, if any
+	SetShellVarContext current
+	Delete "$DESKTOP\${APP_FANCY_NAME}.lnk"
 
 SectionEnd

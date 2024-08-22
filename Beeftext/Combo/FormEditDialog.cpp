@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "FormEditDialog.h"
-#include "ui_comboformeditdialog.h"
+#include "ui_formeditdialog.h"
 
 FormEditDialog::FormEditDialog(QWidget *parent)
     : QDialog(parent)

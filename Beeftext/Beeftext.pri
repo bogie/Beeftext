@@ -1,4 +1,5 @@
 HEADERS += ./BeeftextConstants.h \
+    ./Combo/FormEditDialog.h \
     ./BeeftextGlobals.h \
     ./BeeftextUtils.h \
     ./ClipboardManager.h \
@@ -34,6 +35,7 @@ HEADERS += ./BeeftextConstants.h \
     ./Backup/BackupManager.h \
     ./Backup/BackupRestoreDialog.h
 SOURCES += ./AboutDialog.cpp \
+    ./Combo/FormEditDialog.cpp \
     ./BeeftextConstants.cpp \
     ./BeeftextGlobals.cpp \
     ./BeeftextUtils.cpp \
@@ -70,6 +72,7 @@ SOURCES += ./AboutDialog.cpp \
     ./Backup/BackupManager.cpp \
     ./Backup/BackupRestoreDialog.cpp
 FORMS += ./MainWindow.ui \
+    ./Combo/FormEditDialog.ui \
     ./ShortcutDialog.ui \
     ./AboutDialog.ui \
     ./PreferencesDialog.ui \

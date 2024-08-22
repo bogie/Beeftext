@@ -517,7 +517,7 @@
     <QtUic Include="Combo\ComboFormDialog.ui">
       <Filter>Combo</Filter>
     </QtUic>
-    <QtUic Include="Combo\ComboFormEditDialog.ui">
+    <QtUic Include="Combo\FormEditDialog.ui">
       <Filter>Combo</Filter>
     </QtUic>
     <QtUic Include="Dialogs\VariableFormDialog.ui">

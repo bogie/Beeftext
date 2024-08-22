@@ -490,7 +490,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Combo\ComboFormDialog.ui" />
-    <QtUic Include="Combo\ComboFormEditDialog.ui" />
+    <QtUic Include="Combo\FormEditDialog.ui" />
     <QtUic Include="Dialogs\AboutDialog.ui" />
     <QtUic Include="Dialogs\ShortcutDialog.ui" />
     <QtUic Include="Dialogs\VariableFormDialog.ui" />

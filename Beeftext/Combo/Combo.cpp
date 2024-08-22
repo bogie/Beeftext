@@ -593,14 +593,14 @@ QString Combo::evaluatedSnippet(bool &outCancelled, QSet<QString> const &forbidd
 
 
     // Maybe speed this up by simply passing the entire formList_ whether or not it is used in the snippet
-    QList<FormResult> formRes;
+    QMap<QString, FormResult> formRes;
     while (fMatch.hasNext()) {
         QRegularExpressionMatch match = fMatch.next();
         QString variable = match.captured(1);
         QString const description = variable.right(variable.size() - QString("form:").size());
         for (FormResult r : formList_) {
             if (r.name == description) {
-                formRes.append(r);
+                formRes.insert(description, r);
             }
         }
     }
