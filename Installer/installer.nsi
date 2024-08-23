@@ -26,10 +26,10 @@
 !define VS_DEVENV_PATH "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.com"
 !define LICENSE_FILE_NAME "LICENSE"
 !define LICENSE_FILE_PATH "..\${LICENSE_FILE_NAME}"
-!define WEBSITE "https://beeftext.org"
-!define AUTHOR "Xavier Michelon"
-!define COMPANY "beeftext.org"
-!define VERSION_MAJOR 16
+!define WEBSITE "https://github.com/bogie/beeftext"
+!define AUTHOR "Bojan Hartmann"
+!define COMPANY "beefiertext"
+!define VERSION_MAJOR 17
 !define VERSION_MINOR 0
 !define APP_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}"
 !define LEFT_IMAGE_PATH "${RESOURCES_DIR}\installerLeftImage.bmp"
@@ -58,7 +58,7 @@ Name  "${APP_FANCY_NAME} v${VERSION_MAJOR}.${VERSION_MINOR}"
 OutFile "${OUTPUT_DIR}\${APP_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}-Installer.exe"
 SetCompressor lzma # better result than default zlib, but slower
 RequestExecutionLevel user
-InstallDir "$PROGRAMFILES64\${APP_FANCY_NAME}"
+InstallDir "$APPDATA\${APP_FANCY_NAME}"
 
 
 #define the sequence of pages for the installer
