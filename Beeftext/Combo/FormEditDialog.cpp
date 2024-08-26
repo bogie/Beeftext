@@ -23,11 +23,11 @@ FormEditDialog::FormEditDialog(FormResult* res, QWidget* parent)
     ui->nameEdit->setText(this->result->name);
     ui->typeCombo->setCurrentText(this->result->type);
     if (this->result->type == "choice") {
-        ui->choiceLabel->setText("choice");
+        ui->choiceLabel->setText("Choice");
         ui->choiceEdit->setPlainText(this->result->choices.join("\n"));
     }
     else if (this->result->type == "text") {
-        ui->choiceLabel->setText("default");
+        ui->choiceLabel->setText("Default");
         ui->choiceEdit->setPlainText(this->result->defaultText);
     }
     
@@ -59,6 +59,11 @@ void FormEditDialog::onNameEditTextChanged(QString text) {
 void FormEditDialog::onTypeSelectionChanged(QString type) {
     qDebug() << "onTypeSelectionChanged: Selection changed to type: " << type;
     this->result->type = type;
+    if (type == "choice") {
+        ui->choiceLabel->setText("Choice");
+    }
+    else
+        ui->choiceLabel->setText("Default");
 }
 
 void FormEditDialog::onChoiceEditTextChanged()

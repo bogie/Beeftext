@@ -97,6 +97,9 @@ QMenu *ComboEditor::createComboVariableMenu() {
     action = new QAction(tr("User &Input"), this);
     connect(action, &QAction::triggered, [this]() { this->insertTextInSnippetEdit("#{input:}", true); });
     menu->addAction(action);
+    action = new QAction(tr("Form Input"), this);
+    connect(action, &QAction::triggered, this, &ComboEditor::insertFormVariable);
+    menu->addAction(action);
 
     menu->addSeparator();
     action = new QAction(tr("&About Variables"), this);
@@ -151,6 +154,26 @@ void ComboEditor::insertShortcutVariable() {
     SpShortcut const shortcut = ShortcutDialog::run(this, false);
     if (shortcut)
         this->insertTextInSnippetEdit(QString("#{shortcut:%1}").arg(shortcut->toString()));
+}
+
+void ComboEditor::insertFormVariable()
+{
+    FormEditDialog dg = FormEditDialog(this);
+
+    if (dg.exec() == QDialog::Accepted) {
+        FormResult* res = dg.getResult();
+        qDebug() << "new form input: " << res->name << res->type << res->choices << res->defaultText;
+        QListWidgetItem* item = new QListWidgetItem(res->name);
+        item->setData(FormResult::ItemType::FORM_TYPE, res->type);
+        item->setData(FormResult::ItemType::FORM_NAME, res->name);
+        item->setData(FormResult::ItemType::FORM_CHOICES, res->choices);
+        item->setData(FormResult::ItemType::FORM_DEFAULT, res->defaultText);
+        QString text = "#{form:";
+        text += res->name;
+        text += "}";
+        this->insertTextInSnippetEdit(text, false);
+        emit formInputAdded(res);
+    }
 }
 
 

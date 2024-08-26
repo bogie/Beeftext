@@ -10,6 +10,7 @@
 #ifndef BEEFTEXT_COMBO_EDITOR_H
 #define BEEFTEXT_COMBO_EDITOR_H
 
+#include "FormEditDialog.h"
 
 //****************************************************************************************************************************************************
 /// \brief Combo editor widget
@@ -25,6 +26,9 @@ public: // member functions
     ComboEditor &operator=(ComboEditor &&) = delete; ///< Disabled move assignment operator.
     QString plainText() const; ///< Return the plain text content of the edit.
 
+signals:
+    void formInputAdded(FormResult* res);
+
 private: // data members
     QMenu *createComboVariableMenu(); ///< Create the combo variable menu.
     void insertTextInSnippetEdit(QString const &text, bool move1CharLeft = false); ///< Insert some text at the current cursor position in the snippet text edit control.
@@ -33,7 +37,7 @@ private slots:
     void onEditorContextMenuRequested(QPoint const &pos); ///< Slot for the display of the editor's context menu.
     void insertPowershellVariable(); ///< Prompt for a script file path and insert a powershell variable at the current cursor position.
     void insertShortcutVariable(); ///< Insert a shortcut variable after display the shortcut dialog.
-
+    void insertFormVariable(); ///< Insert a form variable after displaying the form edit dialog
 };
 
 

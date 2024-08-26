@@ -137,6 +137,7 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     connect(ui_.shortcutButton, &QPushButton::clicked, this, &ComboDialog::onChangeShortcut);
     connect(ui_.shortcutReset, &QPushButton::clicked, this, &ComboDialog::onResetShortcut);
     connect(ui_.secretCheckbox, &QCheckBox::checkStateChanged, this, &ComboDialog::onSecretStateChanged);
+    connect(ui_.comboEditor, &ComboEditor::formInputAdded, this, &ComboDialog::onFormInputAdded);
 }
 
 
@@ -377,4 +378,14 @@ void ComboDialog::onResetShortcut()
 void ComboDialog::onSecretStateChanged(bool secret)
 {
     combo_->setSecrecy(secret);
+}
+
+void ComboDialog::onFormInputAdded(FormResult* res) {
+    qDebug() << "onFormInputAdded: " << res->name;
+    QListWidgetItem* item = new QListWidgetItem(res->name);
+    item->setData(FormResult::ItemType::FORM_TYPE, res->type);
+    item->setData(FormResult::ItemType::FORM_NAME, res->name);
+    item->setData(FormResult::ItemType::FORM_CHOICES, res->choices);
+    item->setData(FormResult::ItemType::FORM_DEFAULT, res->defaultText);
+    ui_.formInputWidget->addItem(item);
 }

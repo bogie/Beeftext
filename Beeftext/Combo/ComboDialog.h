@@ -48,6 +48,7 @@ private slots:
     void onChangeShortcut();
     void onResetShortcut();
     void onSecretStateChanged(bool secret);
+    void onFormInputAdded(FormResult* res);
 
 private: // data members
     Ui::ComboDialog ui_ {}; ///< The GUI for the dialog
