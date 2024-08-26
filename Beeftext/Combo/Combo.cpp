@@ -136,10 +136,7 @@ Combo::Combo(QJsonObject const &object, qint32 formatVersion, GroupList const &g
     if (object.contains(kFormArray)) {
         QJsonArray formData = object[kFormArray].toArray();
         for (QJsonValue v : formData) {
-            FormResult res;
-            res.name = v.toObject().value("name").toString();
-            res.type = v.toObject().value("type").toString();
-            res.choices = v.toObject().value("choices").toString().split("\n");
+            FormResult res = FormResult::fromJsonObject(v);
             formList_.append(res);
         }
     }
@@ -502,11 +499,7 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
     QJsonArray formData;
     
     for (FormResult res : formList_) {
-        QJsonObject formEntry;
-        formEntry.insert("name", res.name);
-        formEntry.insert("type", res.type);
-        formEntry.insert("choices", res.choices.join("\n"));
-        formData.append(formEntry);
+        formData.append(res.toJsonObject());
     }
 
     result.insert(kFormArray, formData);
@@ -652,14 +645,52 @@ QString Combo::evaluatedSnippet(bool &outCancelled, QSet<QString> const &forbidd
         for (FormResult r : formList_) {
             if (r.name == description) {
                 formRes.insert(description, r);
+
+                // check if choices have forms
+                
+                QRegularExpressionMatchIterator cMatch = constants::kFormRegExp.globalMatch(r.choices.join("\n"));
+                while (cMatch.hasNext()) {
+                    QRegularExpressionMatch m = cMatch.next();
+                    QString v = m.captured(1);
+                    QString const desc = v.right(v.size() - QString("form:").size());
+                    for (FormResult s : formList_) {
+                        if (s.name == desc) {
+                            qDebug() << "inserting desc: " << desc << " and formres: " << s.name;
+                            formRes.insert(desc, s);
+                        }
+                            
+                    }
+                }
+                
             }
         }
     }
 
-    // This must run before any other substitutions as it overwirtes knownInputVariables
+    // This must run before any other substitutions as it overwrites knownInputVariables
     if (formRes.size() > 0) {
         if (VariableFormDialog::run(displayName(), formRes, knownInputVariables)) {
-            qDebug() << "form result knownInputVariables: " << knownInputVariables;
+            for (QString key : knownInputVariables.keys()) {
+                QString value = knownInputVariables.value(key);
+                QString result;
+                
+                while (true) {
+                    QRegularExpressionMatch match = constants::kVariableRegExp.match(value);
+                    if (!match.hasMatch()) {
+                        result += value;
+                        break;
+                    }
+                        
+                    QString variable = match.captured(1);
+                    qint32 const pos = qint32(match.capturedStart(0));
+                    if (pos > 0)
+                        result += value.left(pos);
+                    value = value.right(value.size() - pos - match.capturedLength());
+                    variable.replace("\\}", "}");
+                    result += evaluateVariable(variable, forbiddenSubCombos, knownInputVariables, outCancelled);
+                }
+                knownInputVariables.insert(key, result);
+            }
+            qDebug() << "after substitution: " << knownInputVariables;
         }
     }
 

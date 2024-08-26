@@ -7,15 +7,33 @@
 class FormResult {
 public:
     FormResult() {}
-    FormResult(QString name, QString type, QList<QString> choices) : 
-    name(name), type(type),choices(choices)
+    FormResult(QString name, QString type, QList<QString> choices, QString defaultText = "") :
+    name(name), type(type),choices(choices), defaultText(defaultText)
     {
         
     }
 
-    enum ItemType { FORM_TYPE = 1001, FORM_NAME = 1002, FORM_CHOICES = 1003 };
+    QJsonObject toJsonObject() {
+        QJsonObject formEntry;
+        formEntry.insert("name", this->name);
+        formEntry.insert("type", this->type);
+        formEntry.insert("choices", this->choices.join("\n"));
+        formEntry.insert("defaultText", this->defaultText);
+        return formEntry;
+    }
 
-    QString name, type;
+    static FormResult fromJsonObject(QJsonValue v) {
+        FormResult res;
+        res.name = v.toObject().value("name").toString();
+        res.type = v.toObject().value("type").toString();
+        res.choices = v.toObject().value("choices").toString().split("\n");
+        res.defaultText = v.toObject().contains("defaultText") ? v.toObject().value("defaultText").toString() : "";
+        return res;
+    }
+
+    enum ItemType { FORM_TYPE = 1001, FORM_NAME = 1002, FORM_CHOICES = 1003, FORM_DEFAULT = 1004 };
+
+    QString name, type, defaultText;
     QList<QString> choices;
 };
 

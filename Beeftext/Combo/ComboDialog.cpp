@@ -193,6 +193,7 @@ void ComboDialog::fillFormList(QList<FormResult> formList_)
         item->setData(FormResult::ItemType::FORM_TYPE, res.type);
         item->setData(FormResult::ItemType::FORM_NAME, res.name);
         item->setData(FormResult::ItemType::FORM_CHOICES, res.choices);
+        item->setData(FormResult::ItemType::FORM_DEFAULT, res.defaultText);
         ui_.formInputWidget->addItem(item);
     }
 }
@@ -227,6 +228,7 @@ void ComboDialog::onActionOk() {
         res.name = item->data(FormResult::ItemType::FORM_NAME).toString();
         res.type = item->data(FormResult::ItemType::FORM_TYPE).toString();
         res.choices = item->data(FormResult::ItemType::FORM_CHOICES).toStringList();
+        res.defaultText = item->data(FormResult::ItemType::FORM_DEFAULT).toString();
         formList_.append(res);
     }
     combo_->setFormList(formList_);
@@ -293,13 +295,18 @@ void ComboDialog::onFormInputCustomContextMenuRequested(const QPoint& pos) {
 
 void ComboDialog::onFormInputItemDoubleClicked(QListWidgetItem* item)
 {
-    FormResult* cr = new FormResult(item->data(FormResult::ItemType::FORM_NAME).toString(), item->data(FormResult::ItemType::FORM_TYPE).toString(), item->data(FormResult::ItemType::FORM_CHOICES).toStringList());
+    FormResult* cr = new FormResult(
+        item->data(FormResult::ItemType::FORM_NAME).toString(),
+        item->data(FormResult::ItemType::FORM_TYPE).toString(),
+        item->data(FormResult::ItemType::FORM_CHOICES).toStringList(),
+        item->data(FormResult::ItemType::FORM_DEFAULT).toString());
     FormEditDialog* dg = new FormEditDialog(cr, this);
     if (dg->exec() == QDialog::Accepted) {
         item->setText(cr->name);
         item->setData(FormResult::ItemType::FORM_TYPE, cr->type);
         item->setData(FormResult::ItemType::FORM_NAME, cr->name);
         item->setData(FormResult::ItemType::FORM_CHOICES, cr->choices);
+        item->setData(FormResult::ItemType::FORM_DEFAULT, cr->defaultText);
     }
     delete cr;
 }
@@ -311,11 +318,12 @@ void ComboDialog::onAddFormInput() {
 
     if (dg.exec() == QDialog::Accepted) {
         FormResult* res = dg.getResult();
-        qDebug() << "new form input: " << res->name << res->type << res->choices;
+        qDebug() << "new form input: " << res->name << res->type << res->choices << res->defaultText;
         QListWidgetItem* item = new QListWidgetItem(res->name);
         item->setData(FormResult::ItemType::FORM_TYPE, res->type);
         item->setData(FormResult::ItemType::FORM_NAME, res->name);
         item->setData(FormResult::ItemType::FORM_CHOICES, res->choices);
+        item->setData(FormResult::ItemType::FORM_DEFAULT, res->defaultText);
         ui_.formInputWidget->addItem(item);
     }
 }
@@ -323,13 +331,18 @@ void ComboDialog::onAddFormInput() {
 void ComboDialog::onModifyFormInput(QListWidgetItem *item)
 {
     qDebug() << "modify form input for item: " << item->data(FormResult::ItemType::FORM_NAME).toString();
-    FormResult* cr = new FormResult(item->data(FormResult::ItemType::FORM_NAME).toString(), item->data(FormResult::ItemType::FORM_TYPE).toString(), item->data(FormResult::ItemType::FORM_CHOICES).toStringList());
+    FormResult* cr = new FormResult(
+        item->data(FormResult::ItemType::FORM_NAME).toString(),
+        item->data(FormResult::ItemType::FORM_TYPE).toString(),
+        item->data(FormResult::ItemType::FORM_CHOICES).toStringList(),
+        item->data(FormResult::ItemType::FORM_DEFAULT).toString());
     FormEditDialog *dg = new FormEditDialog(cr, this);
     if (dg->exec() == QDialog::Accepted) {
         item->setText(cr->name);
         item->setData(FormResult::ItemType::FORM_TYPE, cr->type);
         item->setData(FormResult::ItemType::FORM_NAME, cr->name);
         item->setData(FormResult::ItemType::FORM_CHOICES, cr->choices);
+        item->setData(FormResult::ItemType::FORM_DEFAULT, cr->defaultText);
     }
     delete cr;
 }

@@ -13,6 +13,7 @@ VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
 
 		if (result.type == "text") {
 			QLineEdit* edit = new QLineEdit(this);
+			edit->setText(result.defaultText);
 			layout->addWidget(edit);
 			formWidgets.insert(result.name, edit);
 		} else if(result.type == "choice") {

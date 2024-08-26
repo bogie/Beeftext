@@ -599,7 +599,7 @@ int ComboList::rowCount(QModelIndex const &) const {
 /// \return The number of columns in the table model
 //****************************************************************************************************************************************************
 int ComboList::columnCount(QModelIndex const &) const {
-    return 6;
+    return 7;
 }
 
 
@@ -629,12 +629,14 @@ QVariant ComboList::data(QModelIndex const &index, int role) const {
         case 1:
             return combo->keyword();
         case 2:
-            return combo->snippet();
+            return combo->hasShortcut() ? combo->getShortcut()->toString() : QVariant();
         case 3:
-            return combo->creationDateTime().toString(dtShortFormat);
+            return combo->snippet();
         case 4:
-            return combo->modificationDateTime().toString(dtShortFormat);
+            return combo->creationDateTime().toString(dtShortFormat);
         case 5:
+            return combo->modificationDateTime().toString(dtShortFormat);
+        case 6:
             return combo->lastUseDateTime().toString(dtShortFormat);
         default:
             return QVariant();
@@ -647,12 +649,14 @@ QVariant ComboList::data(QModelIndex const &index, int role) const {
         case 1:
             return combo->keyword();
         case 2:
-            return combo->snippet();
+            return combo->hasShortcut() ? combo->getShortcut()->toString() : QVariant();
         case 3:
-            return combo->creationDateTime().toString(dtLongFormat);
+            return combo->snippet();
         case 4:
-            return combo->modificationDateTime().toString(dtLongFormat);
+            return combo->creationDateTime().toString(dtLongFormat);
         case 5:
+            return combo->modificationDateTime().toString(dtLongFormat);
+        case 6:
             return combo->lastUseDateTime().toString(dtLongFormat);
         default:
             return QVariant();
@@ -687,12 +691,14 @@ QVariant ComboList::headerData(int section, Qt::Orientation orientation, int rol
         case 1:
             return tr("Keyword");
         case 2:
-            return tr("Snippet");
+            return tr("Shortcut");
         case 3:
-            return tr("Created");
+            return tr("Snippet");
         case 4:
-            return tr("Modified");
+            return tr("Created");
         case 5:
+            return tr("Modified");
+        case 6:
             return tr("Last Used");
         default:
             return QVariant();

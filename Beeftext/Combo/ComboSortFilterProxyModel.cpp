@@ -40,7 +40,7 @@ QVariant ComboSortFilterProxyModel::data(const QModelIndex& index, int role) con
 {
     if (role == Qt::DisplayRole) {
         // This will hide the snippet cells for Combos that are set to secret
-        if (index.column() == 2) {
+        if (index.column() == 3) {
             QModelIndex srcIndex = mapToSource(index);
             ComboList& combos = ComboManager::instance().comboListRef();
             SpCombo const& combo = combos[srcIndex.row()];
@@ -89,11 +89,11 @@ bool ComboSortFilterProxyModel::lessThan(const QModelIndex &sourceLeft, const QM
     if (!ok)
         return false;
     switch (sourceLeft.column()) {
-    case 3:
-        return lCombo->creationDateTime() < rCombo->creationDateTime();
     case 4:
-        return lCombo->modificationDateTime() < rCombo->modificationDateTime();
+        return lCombo->creationDateTime() < rCombo->creationDateTime();
     case 5:
+        return lCombo->modificationDateTime() < rCombo->modificationDateTime();
+    case 6:
         return lCombo->lastUseDateTime() < rCombo->lastUseDateTime();
     default:
         return QSortFilterProxyModel::lessThan(sourceLeft, sourceRight);
