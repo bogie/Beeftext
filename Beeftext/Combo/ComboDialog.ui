@@ -17,8 +17,48 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
      <item>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="4,0,0,0,1" columnstretch="0,0">
-       <item row="2" column="1">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="4,0,0,0,1,0" columnstretch="0,0">
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="editName"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelSnippet">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Snippet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop|Qt::AlignmentFlag::AlignTrailing</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0">
+         <property name="spacing">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="editKeyword"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelCaseSensitivity">
+           <property name="text">
+            <string>Case sensitivity</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboCaseSensitivity"/>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelName">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="spacing">
           <number>9</number>
@@ -69,25 +109,12 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelSnippet">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Snippet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop|Qt::AlignmentFlag::AlignTrailing</set>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelKeyword">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Keyword&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="editName"/>
        </item>
        <item row="0" column="1">
         <widget class="ComboEditor" name="comboEditor" native="true">
@@ -96,7 +123,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="labelGroup">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; color:#258fc0; vertical-align:super;&quot;&gt;● &lt;/span&gt;Group&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -106,7 +133,14 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="1">
+        <widget class="QPlainTextEdit" name="editDescription">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
         <widget class="QLabel" name="labelName_2">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -116,39 +150,49 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0">
-         <property name="spacing">
-          <number>9</number>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Shortcut</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLineEdit" name="editKeyword"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelCaseSensitivity">
+          <widget class="QLabel" name="shortcutLabel">
            <property name="text">
-            <string>Case sensitivity</string>
+            <string>None</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboCaseSensitivity"/>
+          <widget class="QPushButton" name="shortcutReset">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>20</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>X</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="shortcutButton">
+           <property name="text">
+            <string>Change</string>
+           </property>
+          </widget>
          </item>
         </layout>
-       </item>
-       <item row="4" column="1">
-        <widget class="QPlainTextEdit" name="editDescription">
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelName">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </item>

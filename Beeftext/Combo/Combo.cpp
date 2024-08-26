@@ -49,6 +49,7 @@ QString const kCursorVariable = "#{cursor}"; ///< The cursor position variable.
 qint32 const kPlaceholderMaxLength = 50; ///< The maximum length of the placeholder name.
 QString const kPlaceholderElision = "..."; ///< The elision text for placeholder (used if placeholder name is too long.
 QString const kFormArray = "formData"; ///< The JSON property name for form data
+QString const kShortcut = "shortcut"; ///< The JSON property name for the shortcut
 
 
 } // anonymous namespace
@@ -141,6 +142,15 @@ Combo::Combo(QJsonObject const &object, qint32 formatVersion, GroupList const &g
             res.choices = v.toObject().value("choices").toString().split("\n");
             formList_.append(res);
         }
+    }
+
+    if (object.contains(kShortcut)) {
+        QVariant const var = object.value(kShortcut);
+        if (!var.isNull() && var.canConvert<qint32>()) {
+            SpShortcut c = Shortcut::fromCombined(var.value<qint32>());
+            if(c->isValid())
+                shortcut_ = c;
+        }        
     }
 
     // because we parse an older format version, we update the modification date, as the combo manager will save
@@ -496,6 +506,10 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
     }
 
     result.insert(kFormArray, formData);
+    if (shortcut_)
+        result.insert(kShortcut, shortcut_->toCombined());
+    else
+        result.insert(kShortcut, "");
     return result;
 }
 
@@ -515,6 +529,26 @@ QList<FormResult> Combo::getFormList() const
 void Combo::setFormList(QList<FormResult> const formList)
 {
     formList_ = formList;
+}
+
+SpShortcut Combo::getShortcut() const
+{
+    return shortcut_;
+}
+
+void Combo::setShortcut(SpShortcut shortcut)
+{
+    shortcut_ = shortcut;
+}
+
+void Combo::resetShortcut()
+{
+    shortcut_.reset();
+}
+
+bool Combo::hasShortcut() const
+{
+    return shortcut_ == nullptr ? false : true;
 }
 
 
@@ -606,9 +640,12 @@ QString Combo::evaluatedSnippet(bool &outCancelled, QSet<QString> const &forbidd
     }
 
     // This must run before any other substitutions as it overwirtes knownInputVariables
-    if (VariableFormDialog::run(displayName(), formRes, knownInputVariables)) {
-        qDebug() << "form result knownInputVariables: " << knownInputVariables;
+    if (formRes.size() > 0) {
+        if (VariableFormDialog::run(displayName(), formRes, knownInputVariables)) {
+            qDebug() << "form result knownInputVariables: " << knownInputVariables;
+        }
     }
+
 
     while (true) {
         QRegularExpressionMatch match = constants::kVariableRegExp.match(remainingText);

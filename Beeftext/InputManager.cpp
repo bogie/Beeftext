@@ -197,6 +197,17 @@ void InputManager::onShortcut(SpShortcut const &shortcut) {
         return;
     }
 
+    qDebug() << "InputManager::onShortcut processing " << shortcut->toString();
+    ComboManager const& cm = ComboManager::instance();
+    ComboList clist = cm.comboListRef();
+    ComboList::iterator const it = clist.findByShortcut(shortcut);
+  
+   if (clist.end() != clist.findByShortcut(shortcut)) {
+        SpCombo const combo = *it;
+        combo->performSubstitution(true);
+        return;
+    }
+
     if (!prefs.beeftextEnabled())
         return;
 

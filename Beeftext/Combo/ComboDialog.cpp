@@ -18,6 +18,7 @@
 #include "Preferences/PreferencesManager.h"
 #include <XMiLib/Exception.h>
 #include <XMiLib/XMiLibConstants.h>
+#include <Dialogs/ShortcutDialog.h>
 
 
 namespace {
@@ -111,6 +112,16 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     ui_.editDescription->setPlainText(combo->description());
     ui_.labelVariables->setText(variablesLabel());
     fillFormList(combo->getFormList());
+
+    if (combo->getShortcut()) {
+        ui_.shortcutLabel->setText(combo->getShortcut()->toString());
+        ui_.shortcutReset->setVisible(true);
+        ui_.shortcutReset->setEnabled(true);
+    }
+    else {
+        ui_.shortcutReset->setVisible(false);
+    }
+
     this->updateGui();
     connect(ui_.editKeyword, &QLineEdit::textChanged, this, &ComboDialog::updateGui);
     connect(ui_.comboEditor, &ComboEditor::textChanged, this, &ComboDialog::updateGui);
@@ -121,6 +132,8 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     connect(new QShortcut(QKeySequence("Ctrl+Return"), this), &QShortcut::activated, this, &ComboDialog::onActionOk);
     connect(ui_.formInputWidget, &QListWidget::customContextMenuRequested, this, &ComboDialog::onFormInputCustomContextMenuRequested);
     connect(ui_.formInputWidget, &QListWidget::itemDoubleClicked, this, &ComboDialog::onFormInputItemDoubleClicked);
+    connect(ui_.shortcutButton, &QPushButton::clicked, this, &ComboDialog::onChangeShortcut);
+    connect(ui_.shortcutReset, &QPushButton::clicked, this, &ComboDialog::onResetShortcut);
 }
 
 
@@ -322,4 +335,25 @@ void ComboDialog::onDeleteFormInput(QListWidgetItem* item)
 {
     qDebug() << "deleting item: " << item->data(FormResult::ItemType::FORM_NAME);
     delete item;
+}
+
+void ComboDialog::onChangeShortcut()
+{
+    SpShortcut shortcut = combo_->getShortcut();
+    if (!ShortcutDialog::run(this, shortcut, false))
+        return;
+    combo_->setShortcut(shortcut);
+    ui_.shortcutLabel->setText(shortcut ? shortcut->toString() : ui_.shortcutLabel->text());
+    if (shortcut) {
+        ui_.shortcutReset->setVisible(true);
+        ui_.shortcutReset->setEnabled(true);
+    }
+        
+}
+
+void ComboDialog::onResetShortcut()
+{
+    ui_.shortcutReset->setVisible(false);
+    ui_.shortcutReset->setEnabled(false);
+    combo_->resetShortcut();
 }

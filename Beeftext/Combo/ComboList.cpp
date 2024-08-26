@@ -175,6 +175,11 @@ bool ComboList::isKeywordUsed(QString const &keyword) const {
     return this->end() != this->findByKeyword(keyword);
 }
 
+bool ComboList::isShortcutUsed(SpShortcut const& shortcut) const
+{
+    return this->end() != this->findByShortcut(shortcut);
+}
+
 
 //****************************************************************************************************************************************************
 /// \param[in] combo The combo.
@@ -259,6 +264,16 @@ ComboList::const_iterator ComboList::findByKeyword(QString const &keyword) const
 //****************************************************************************************************************************************************
 ComboList::iterator ComboList::findByKeyword(QString const &keyword) {
     return std::find_if(this->begin(), this->end(), [&](SpCombo const &combo) -> bool { return combo->keyword() == keyword; });
+}
+
+ComboList::const_iterator ComboList::findByShortcut(SpShortcut const& shortcut) const
+{
+    return std::find_if(this->begin(), this->end(), [&](SpCombo const& combo) -> bool { return combo->hasShortcut() ? *combo->getShortcut() == *shortcut : false; });
+}
+
+ComboList::iterator ComboList::findByShortcut(SpShortcut const& shortcut)
+{
+    return std::find_if(this->begin(), this->end(), [&](SpCombo const& combo) -> bool { return combo->hasShortcut() ? *combo->getShortcut() == *shortcut : false; });
 }
 
 

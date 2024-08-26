@@ -13,6 +13,7 @@
 
 #include "Combo.h"
 #include "Group/GroupList.h"
+#include "Shortcut.h"
 
 
 bool comboFileContainsRichTextCombos(QString const &path); ///< Check if a file contains rich text combos
@@ -53,6 +54,7 @@ public: // member functions
     void clear(); ///< Clear the combo list
     bool contains(SpCombo const &combo) const; ///< Check whether a combo is already in the list, based on its UUID
     bool isKeywordUsed(QString const &keyword) const; ///< Check whether a keyword is already used in the list
+    bool isShortcutUsed(SpShortcut const& shortcut) const; ///< Check whether a shortcut is already used in the list
     bool canComboBeAdded(SpCombo const &combo) const; ///< Check whether a combo can be added
     bool append(SpCombo const &combo); ///< Append a combo at the end of the list
     // ReSharper disable once CppInconsistentNaming
@@ -61,6 +63,8 @@ public: // member functions
     void eraseCombosOfGroup(SpGroup const &group); ///< Erase all the combos of a given group
     const_iterator findByKeyword(QString const &keyword) const; ///< Find a combo by its keyword
     iterator findByKeyword(QString const &keyword); ///< Find a combo by its keyword
+    const_iterator findByShortcut(SpShortcut const& shortcut) const; ///< Find a combo by its keyword
+    iterator findByShortcut(SpShortcut const& shortcut); ///< Find a combo by its keyword
     const_iterator findByUuid(QUuid const &uuid) const; ///< Find a combo by its UUID
     iterator findByUuid(QUuid const &uuid); ///< Find a combo by its UUID
     SpCombo &operator[](qint32 index); ///< Get a mutable reference to the combo at a given position in the list

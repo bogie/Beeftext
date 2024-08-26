@@ -15,6 +15,7 @@
 #include "MatchingMode.h"
 #include "CaseSensitivity.h"
 #include "FormEditDialog.h"
+#include "Shortcut.h"
 #include <memory>
 #include <vector>
 
@@ -76,6 +77,10 @@ public: // member functions
     void changeUuid(); ///< Get a new Uuid for the combo
     QList<FormResult> getFormList() const; ///< Get the possible form combos
     void setFormList(QList<FormResult> const formList);
+    SpShortcut getShortcut() const;
+    void setShortcut(SpShortcut shortcut);
+    void resetShortcut();
+    bool hasShortcut() const;
 
 public: // static functions
     static SpCombo create(QString const &name = QString(), QString const &keyword = QString(),
@@ -103,6 +108,7 @@ private: // data member
     QDateTime lastUseDateTime_; ///< The last use date/time
     bool enabled_ { true }; ///< Is the combo enabled
     QList<FormResult> formList_;
+    SpShortcut shortcut_;
 };
 
 

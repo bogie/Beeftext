@@ -45,6 +45,8 @@ private slots:
     void onAddFormInput();
     void onModifyFormInput(QListWidgetItem *item);
     void onDeleteFormInput(QListWidgetItem* item);
+    void onChangeShortcut();
+    void onResetShortcut();
 
 private: // data members
     Ui::ComboDialog ui_ {}; ///< The GUI for the dialog
