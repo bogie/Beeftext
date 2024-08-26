@@ -6,9 +6,15 @@
 # - ShellExecAsUser ( https://nsis.sourceforge.io/ShellExecAsUser_plug-in ): Runs Beeftext as standard user at the end of the installer
 # - NsProcess (https://nsis.sourceforge.io/NsProcess_plugin): Find and kill running instances of the application
 
+!define MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME "CurrentUser"
+!define MULTIUSER_INSTALLMODE_INSTDIR "$(^Name)"
+!define MULTIUSER_INSTALLMODE_COMMANDLINE
+!define MULTIUSER_EXECUTIONLEVEL Highest
+!define MULTIUSER_MUI
 
-!include "MUI2.nsh" # use the MUI2 scripts for better visual aspect
 !include "LogicLib.nsh" # we use the logic lib for easy conditional statements
+!include "MultiUser.nsh"
+!include "MUI2.nsh" # use the MUI2 scripts for better visual aspect
 !include "nsDialogs.nsh" # used for custom dialog pages
 !include "FileFunc.nsh" # file functions (used for GetSize)
 !include WinMessages.nsh # windows messages (used for finding and killing running instance)
@@ -30,7 +36,7 @@
 !define AUTHOR "Bojan Hartmann"
 !define COMPANY "beefiertext"
 !define VERSION_MAJOR 17
-!define VERSION_MINOR 0
+!define VERSION_MINOR 1
 !define APP_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}"
 !define LEFT_IMAGE_PATH "${RESOURCES_DIR}\installerLeftImage.bmp"
 !define TOP_IMAGE_PATH "${RESOURCES_DIR}\installerTopImage.bmp"
@@ -49,7 +55,7 @@
 #!define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Build the solution file and stop if the result is not 0
-!system '"${VS_DEVENV_PATH}" "..\${APP_NAME}.sln" /rebuild "Release|x64"' = 0
+!system '"${VS_DEVENV_PATH}" "..\${APP_NAME}.sln" /build "Release|x64"' = 0
 
 
 # General attributes for the installer/uninstaller
@@ -58,11 +64,23 @@ Name  "${APP_FANCY_NAME} v${VERSION_MAJOR}.${VERSION_MINOR}"
 OutFile "${OUTPUT_DIR}\${APP_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}-Installer.exe"
 SetCompressor lzma # better result than default zlib, but slower
 RequestExecutionLevel user
-InstallDir "$APPDATA\${APP_FANCY_NAME}"
+#InstallDir "$APPDATA\${APP_FANCY_NAME}"
 
+Var IsAdminMode
+!macro SetAdminMode
+StrCpy $IsAdminMode 1
+SetShellVarContext All
+${IfThen} $InstDir == "" ${|} StrCpy $InstDir "$Programfiles\$(^Name)" ${|}
+!macroend
+!macro SetUserMode
+StrCpy $IsAdminMode 0
+SetShellVarContext Current
+${IfThen} $InstDir == "" ${|} StrCpy $InstDir "$LocalAppData\Programs\$(^Name)" ${|}
+!macroend
 
 #define the sequence of pages for the installer
 !insertmacro MUI_PAGE_WELCOME
+!insertmacro MULTIUSER_PAGE_INSTALLMODE
 !define MUI_TEXT_LICENSE_TITLE "License"
 !define MUI_TEXT_LICENSE_SUBTITLE "Please review the licensing terms before installing $(^NameDA)."
 !define MUI_INNERTEXT_LICENSE_TOP "Press Page Down to see the rest of the terms and conditions."
@@ -90,6 +108,7 @@ InstallDir "$APPDATA\${APP_FANCY_NAME}"
 ###################################
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
+  !insertmacro MULTIUSER_INIT
   Call determineInstallDir
   Call checkAlreadyInstalled
 FunctionEnd
@@ -101,13 +120,13 @@ FunctionEnd
 Function checkAlreadyInstalled
   Push $0 
   Push $1
-  ReadRegStr $0 HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "UninstallString"
+  ReadRegStr $0 HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "UninstallString"
   ${If} $0 != ""
 	 MessageBox MB_YESNO|MB_ICONQUESTION "Before you can install ${APP_FANCY_NAME}, you must uninstall the version that is currently installed on your computer.$\n$\nDo you want to uninstall the previous version of ${APP_FANCY_NAME} ?" /SD IDYES IDYES yes IDNO no
 no:
 	 Abort
 yes:
-   ReadRegStr $1 HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "InstallLocation"
+   ReadRegStr $1 HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "InstallLocation"
    IfSilent +3
    ExecWait '$0 _?=$1' # the _?=$1 means that the uninstaller will not copy itself but run from the installer folder, forcing ExecWait to actually wait for the uninstaller to finish.
    Goto clean
@@ -123,10 +142,21 @@ FunctionEnd
 # Installer initialization function
 ###################################
 Function determineInstallDir
-    ReadRegStr $INSTDIR HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "InstallDir"
-    ${If} $INSTDIR == ""
-    StrCpy $INSTDIR "$PROGRAMFILES64\${APP_FANCY_NAME}"
-    ${Endif}
+    #ReadRegStr $INSTDIR HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "InstallDir"
+	#${If} $INSTDIR == ""
+    #StrCpy $INSTDIR "$InstDir"
+    #${Endif}
+
+	UserInfo::GetAccountType
+	Pop $0
+	${IfThen} $0 != "Admin" ${|} Goto setmode_currentuser ${|}
+    !insertmacro SetAdminMode
+	Goto finalize_mode
+
+	setmode_currentuser:
+	!insertmacro SetUserMode
+
+	finalize_mode:
     DetailPrint $INSTDIR
 FunctionEnd
 
@@ -207,23 +237,23 @@ WriteRegStr HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "InstallDir" "$INSTDIR"
 WriteUninstaller "${UNINSTALLER_FILE_NAME}"
 
 # Add Windows registry keys for uninstaller
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayName" "${APP_FANCY_NAME}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "UninstallString" '"$INSTDIR\${UNINSTALLER_FILE_NAME}"'
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "InstallLocation" "$INSTDIR"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayIcon" "$INSTDIR\${APP_NAME}.exe"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "Publisher" "${COMPANY}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "RegOwner" "${AUTHOR}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "RegCompany" "${COMPANY}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "URLUpdateInfo" "${WEBSITE}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "URLInfoAbout" "${WEBSITE}"
-WriteRegStr HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayVersion" "${APP_VERSION}"
-WriteRegDWORD HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "VersionMajor" "${VERSION_MAJOR}"
-WriteRegDWORD HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "VersionMinor" "${VERSION_MINOR}"
-WriteRegDWORD HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "NoModify" 1
-WriteRegDWORD HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "NoRepair" 1
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayName" "${APP_FANCY_NAME}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "UninstallString" '"$INSTDIR\${UNINSTALLER_FILE_NAME}"'
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "InstallLocation" "$INSTDIR"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayIcon" "$INSTDIR\${APP_NAME}.exe"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "Publisher" "${COMPANY}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "RegOwner" "${AUTHOR}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "RegCompany" "${COMPANY}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "URLUpdateInfo" "${WEBSITE}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "URLInfoAbout" "${WEBSITE}"
+WriteRegStr HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "DisplayVersion" "${APP_VERSION}"
+WriteRegDWORD HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "VersionMajor" "${VERSION_MAJOR}"
+WriteRegDWORD HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "VersionMinor" "${VERSION_MINOR}"
+WriteRegDWORD HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "NoModify" 1
+WriteRegDWORD HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "NoRepair" 1
 Call getInstallDirSize
 Pop $0
-WriteRegDWORD HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "EstimatedSize" $0
+WriteRegDWORD HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}" "EstimatedSize" $0
 
 SectionEnd
 
@@ -268,7 +298,7 @@ FunctionEnd
 #####################################
 
 Section Uninstall
-
+	!insertmacro MULTIUSER_UNINIT
 	# Remove application files and folders
 	SetShellVarContext all
 
@@ -278,7 +308,7 @@ Section Uninstall
 	RMDir /r "$INSTDIR"
 
 	# Remove registry keys that are used for the uninstaller
-	DeleteRegKey HKLM "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}"
+	DeleteRegKey HKCU "${REGISTRY_UNINSTALLER_FOLDER}\${APP_NAME}"
 	DeleteRegValue HKCU "Software\${COMPANY}\${APP_FANCY_NAME}" "AppExePath"
 	DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${APP_FANCY_NAME}" # this autostart key may have been created by the application itself
 
