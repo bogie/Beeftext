@@ -122,6 +122,8 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
         ui_.shortcutReset->setVisible(false);
     }
 
+    ui_.secretCheckbox->setChecked(combo_->isSecret());
+
     this->updateGui();
     connect(ui_.editKeyword, &QLineEdit::textChanged, this, &ComboDialog::updateGui);
     connect(ui_.comboEditor, &ComboEditor::textChanged, this, &ComboDialog::updateGui);
@@ -134,6 +136,7 @@ ComboDialog::ComboDialog(SpCombo const &combo, QString const &title, QWidget *pa
     connect(ui_.formInputWidget, &QListWidget::itemDoubleClicked, this, &ComboDialog::onFormInputItemDoubleClicked);
     connect(ui_.shortcutButton, &QPushButton::clicked, this, &ComboDialog::onChangeShortcut);
     connect(ui_.shortcutReset, &QPushButton::clicked, this, &ComboDialog::onResetShortcut);
+    connect(ui_.secretCheckbox, &QCheckBox::checkStateChanged, this, &ComboDialog::onSecretStateChanged);
 }
 
 
@@ -356,4 +359,9 @@ void ComboDialog::onResetShortcut()
     ui_.shortcutReset->setVisible(false);
     ui_.shortcutReset->setEnabled(false);
     combo_->resetShortcut();
+}
+
+void ComboDialog::onSecretStateChanged(bool secret)
+{
+    combo_->setSecrecy(secret);
 }

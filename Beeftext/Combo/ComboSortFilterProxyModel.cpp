@@ -32,6 +32,28 @@ void ComboSortFilterProxyModel::setGroup(SpGroup const &group) {
     this->invalidateFilter();
 }
 
+//****************************************************************************************************************************************************
+/// \param[in] index The current QModelIndex that is being rendered
+/// \param[in] role The Qt::ItemRole being displayed
+//****************************************************************************************************************************************************
+QVariant ComboSortFilterProxyModel::data(const QModelIndex& index, int role) const
+{
+    if (role == Qt::DisplayRole) {
+        // This will hide the snippet cells for Combos that are set to secret
+        if (index.column() == 2) {
+            QModelIndex srcIndex = mapToSource(index);
+            ComboList& combos = ComboManager::instance().comboListRef();
+            SpCombo const& combo = combos[srcIndex.row()];
+            
+            if (combo->isSecret()) {
+                return QVariant("***");
+            }
+                
+        }
+    }
+    return QAbstractProxyModel::data(index, role);
+}
+
 
 //****************************************************************************************************************************************************
 /// \param[in] sourceRow The row index in the source model

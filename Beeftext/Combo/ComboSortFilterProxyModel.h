@@ -29,6 +29,7 @@ public: // member functions
     ComboSortFilterProxyModel &operator=(ComboSortFilterProxyModel const &) = delete; ///< Disabled assignment operator
     ComboSortFilterProxyModel &operator=(ComboSortFilterProxyModel &&) = delete; ///< Disabled move assignment operator
     void setGroup(SpGroup const &group); ///< Set the group to display
+    QVariant data(const QModelIndex& index, int role) const override;
 
 protected: // member functions
     bool filterAcceptsRow(int sourceRow, QModelIndex const &) const override; ///< Check if a row should be included or discarded

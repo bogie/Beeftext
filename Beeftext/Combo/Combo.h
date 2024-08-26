@@ -81,6 +81,8 @@ public: // member functions
     void setShortcut(SpShortcut shortcut);
     void resetShortcut();
     bool hasShortcut() const;
+    bool isSecret() const;
+    void setSecrecy(bool secret);
 
 public: // static functions
     static SpCombo create(QString const &name = QString(), QString const &keyword = QString(),
@@ -109,6 +111,7 @@ private: // data member
     bool enabled_ { true }; ///< Is the combo enabled
     QList<FormResult> formList_;
     SpShortcut shortcut_;
+    bool secret_{ false };
 };
 
 

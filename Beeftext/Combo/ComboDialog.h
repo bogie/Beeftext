@@ -47,6 +47,7 @@ private slots:
     void onDeleteFormInput(QListWidgetItem* item);
     void onChangeShortcut();
     void onResetShortcut();
+    void onSecretStateChanged(bool secret);
 
 private: // data members
     Ui::ComboDialog ui_ {}; ///< The GUI for the dialog

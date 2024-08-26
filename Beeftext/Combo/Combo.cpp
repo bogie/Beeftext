@@ -50,7 +50,7 @@ qint32 const kPlaceholderMaxLength = 50; ///< The maximum length of the placehol
 QString const kPlaceholderElision = "..."; ///< The elision text for placeholder (used if placeholder name is too long.
 QString const kFormArray = "formData"; ///< The JSON property name for form data
 QString const kShortcut = "shortcut"; ///< The JSON property name for the shortcut
-
+QString const kIsSecret = "secret"; ///< The JSON property name, which describes if the snippet content should be hidden in the Combo List
 
 } // anonymous namespace
 
@@ -151,6 +151,10 @@ Combo::Combo(QJsonObject const &object, qint32 formatVersion, GroupList const &g
             if(c->isValid())
                 shortcut_ = c;
         }        
+    }
+
+    if (object.contains(kIsSecret)) {
+        secret_ = object.value(kIsSecret).toBool();
     }
 
     // because we parse an older format version, we update the modification date, as the combo manager will save
@@ -510,6 +514,9 @@ QJsonObject Combo::toJsonObject(bool includeGroup) const {
         result.insert(kShortcut, shortcut_->toCombined());
     else
         result.insert(kShortcut, "");
+
+    result.insert(kIsSecret, secret_);
+
     return result;
 }
 
@@ -549,6 +556,16 @@ void Combo::resetShortcut()
 bool Combo::hasShortcut() const
 {
     return shortcut_ == nullptr ? false : true;
+}
+
+bool Combo::isSecret() const
+{
+    return secret_;
+}
+
+void Combo::setSecrecy(bool secret)
+{
+    secret_ = secret;
 }
 
 
