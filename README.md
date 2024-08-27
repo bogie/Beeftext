@@ -5,7 +5,7 @@
 Beeftext is a text snippet management tool for Windows, inspired by [TextExpander].
 
 > [!important]  
-> Beeftext is now in maintenance mode. No new feature will be added, but fixes for major issues will be provided.
+> I have continued development for BeefText in a limited capacity to suit mainly my needs. PRs might be accepted, feature requests might be considered.
 
 TextExpander is a great program, packed with features. To keep the company profitable, 
 [Smile] had to switch to a subscription-based model in 2016. And for people who only need the
@@ -16,7 +16,7 @@ written in C++ using the [Qt] framework.
 
 ## Contributors
 
-The project is developed and managed by [Xavier Michelon]. The project is not looking for contributors and all pull requests will be rejected.
+The project was originally developed and managed by [Xavier Michelon]. I have continued limited work on some missing features.
 
 Contributors for translations are listed in the [dedicated wiki page](https://github.com/xmichelo/Beeftext/wiki/User-provided-translations).
 
