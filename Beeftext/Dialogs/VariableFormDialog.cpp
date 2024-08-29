@@ -7,30 +7,22 @@ VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
 	ui.setupUi(this);
 
 	for (FormResult result : formList.values()) {
-		QLabel* label = new QLabel(result.name, this);
-		QHBoxLayout* layout = new QHBoxLayout(this);
-		layout->addWidget(label);
-
 		if (result.type == "text") {
-			QLineEdit* edit = new QLineEdit(this);
-			edit->setText(result.defaultText);
-			layout->addWidget(edit);
+			QLineEdit *edit = new QLineEdit(result.defaultText,this);
 			formWidgets.insert(result.name, edit);
+			ui.formInputsLayout->addRow(result.name, edit);
 		} else if(result.type == "choice") {
 			QComboBox* combo = new QComboBox(this);
 			combo->addItems(result.choices);
-			layout->addWidget(combo);
 			formWidgets.insert(result.name, combo);
+			ui.formInputsLayout->addRow(result.name, combo);
 		} else {
-			QLineEdit* edit = new QLineEdit(this);
-			layout->addWidget(edit);
+			QLineEdit* edit = new QLineEdit(result.defaultText,this);
 			formWidgets.insert(result.name, edit);
-		}
-		
-		ui.formInputsLayout->addLayout(layout);
-		
+			ui.formInputsLayout->addRow(result.name, edit);
+		}		
 	}
-
+	
 	this->show();
 }
 

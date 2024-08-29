@@ -125,6 +125,11 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>typeCombo</tabstop>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>choiceEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
