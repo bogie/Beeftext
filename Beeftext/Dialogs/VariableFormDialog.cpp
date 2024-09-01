@@ -23,6 +23,7 @@ VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
 		}		
 	}
 	
+	formWidgets.values().at(0)->setFocus();
 	this->show();
 }
 
@@ -41,8 +42,6 @@ QMap<QString, QString> VariableFormDialog::getFormVariables()
 
 	for (QString variable : formWidgets.keys()) {
 		FormResult res = formList.value(variable);
-
-		qDebug() << "type of widget is: " << formWidgets.value(variable)->objectName();
 
 		if (QLineEdit* edit = qobject_cast<QLineEdit*>(formWidgets.value(variable))) {
 			formVariables.insert(variable, edit->text());
