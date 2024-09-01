@@ -36,7 +36,7 @@
 !define AUTHOR "Bojan Hartmann"
 !define COMPANY "beefiertext"
 !define VERSION_MAJOR 17
-!define VERSION_MINOR 2
+!define VERSION_MINOR 3
 !define APP_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}"
 !define LEFT_IMAGE_PATH "${RESOURCES_DIR}\installerLeftImage.bmp"
 !define TOP_IMAGE_PATH "${RESOURCES_DIR}\installerTopImage.bmp"
