@@ -8,7 +8,7 @@ VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
 
 	for (FormResult result : formList.values()) {
 		if (result.type == "text") {
-			QLineEdit *edit = new QLineEdit(result.defaultText,this);
+			QLineEdit *edit = new QLineEdit(result.defaultText, this);
 			formWidgets.insert(result.name, edit);
 			ui.formInputsLayout->addRow(result.name, edit);
 		} else if(result.type == "choice") {
@@ -16,6 +16,10 @@ VariableFormDialog::VariableFormDialog(QMap<QString, FormResult> formList)
 			combo->addItems(result.choices);
 			formWidgets.insert(result.name, combo);
 			ui.formInputsLayout->addRow(result.name, combo);
+		} else if (result.type == "multiline") {
+			QPlainTextEdit* edit = new QPlainTextEdit(result.defaultText, this);
+			formWidgets.insert(result.name, edit);
+			ui.formInputsLayout->addRow(result.name, edit);
 		} else {
 			QLineEdit* edit = new QLineEdit(result.defaultText,this);
 			formWidgets.insert(result.name, edit);
@@ -45,9 +49,10 @@ QMap<QString, QString> VariableFormDialog::getFormVariables()
 
 		if (QLineEdit* edit = qobject_cast<QLineEdit*>(formWidgets.value(variable))) {
 			formVariables.insert(variable, edit->text());
-		}
-		else if (QComboBox* box = qobject_cast<QComboBox*>(formWidgets.value(variable))) {
+		} else if (QComboBox* box = qobject_cast<QComboBox*>(formWidgets.value(variable))) {
 			formVariables.insert(variable, box->currentText());
+		} else if (QPlainTextEdit* edit= qobject_cast<QPlainTextEdit*>(formWidgets.value(variable))) {
+			formVariables.insert(variable, edit->toPlainText());
 		}
 	}
 

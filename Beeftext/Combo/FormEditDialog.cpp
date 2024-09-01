@@ -8,9 +8,11 @@ FormEditDialog::FormEditDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->choiceLabel->setText("Default");
+
     connect(this->ui->nameEdit, &QLineEdit::textChanged, this, &FormEditDialog::onNameEditTextChanged);
     connect(this->ui->typeCombo, &QComboBox::textActivated, this, &FormEditDialog::onTypeSelectionChanged);
-    connect(this->ui->choiceEdit, &QTextEdit::textChanged, this, &FormEditDialog::onChoiceEditTextChanged);
+    connect(this->ui->choiceEdit, &QPlainTextEdit::textChanged, this, &FormEditDialog::onChoiceEditTextChanged);
     connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &FormEditDialog::onButtonBoxAccepted);
 }
 
@@ -33,7 +35,7 @@ FormEditDialog::FormEditDialog(FormResult* res, QWidget* parent)
     
     connect(this->ui->nameEdit, &QLineEdit::textChanged, this, &FormEditDialog::onNameEditTextChanged);
     connect(this->ui->typeCombo, &QComboBox::textActivated, this, &FormEditDialog::onTypeSelectionChanged);
-    connect(this->ui->choiceEdit, &QTextEdit::textChanged, this, &FormEditDialog::onChoiceEditTextChanged);
+    connect(this->ui->choiceEdit, &QPlainTextEdit::textChanged, this, &FormEditDialog::onChoiceEditTextChanged);
     connect(this->ui->buttonBox, &QDialogButtonBox::accepted, this, &FormEditDialog::onButtonBoxAccepted);
 }
 
@@ -57,7 +59,6 @@ void FormEditDialog::onNameEditTextChanged(QString text) {
 }
 
 void FormEditDialog::onTypeSelectionChanged(QString type) {
-    qDebug() << "onTypeSelectionChanged: Selection changed to type: " << type;
     this->result->type = type;
     if (type == "choice") {
         ui->choiceLabel->setText("Choice");
