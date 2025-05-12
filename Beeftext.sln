@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XMiLib", "Submodules\XMiLib
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Beeftext", "Beeftext\Beeftext.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InstallerVS", "InstallerVS\InstallerVS.vdproj", "{8DAC3270-F44D-EF33-926D-79F1A5E04B86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,12 +29,15 @@ Global
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.DebugRemote|x64.Deploy.0 = DebugRemote|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
+		{8DAC3270-F44D-EF33-926D-79F1A5E04B86}.Debug|x64.ActiveCfg = Debug
+		{8DAC3270-F44D-EF33-926D-79F1A5E04B86}.DebugRemote|x64.ActiveCfg = Debug
+		{8DAC3270-F44D-EF33-926D-79F1A5E04B86}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6C34D44C-97E9-4375-8F51-D29779424AB7}
 		Qt5Version = $(DefaultQtVersion)
+		SolutionGuid = {6C34D44C-97E9-4375-8F51-D29779424AB7}
 	EndGlobalSection
 EndGlobal

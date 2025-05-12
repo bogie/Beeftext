@@ -27,7 +27,7 @@
 !define REGISTRY_UNINSTALLER_FOLDER Software\Microsoft\Windows\CurrentVersion\Uninstall
 !define OUTPUT_DIR _build
 !define RESOURCES_DIR "Resources"
-!define QTDIR "C:\Qt\6.8.0\msvc2022_64"
+!define QTDIR "C:\Qt\6.9.0\msvc2022_64"
 !define VC_DLL_DIR "..\Vendor\VCRuntime"
 !define VS_DEVENV_PATH "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.com"
 !define LICENSE_FILE_NAME "LICENSE"

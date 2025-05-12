@@ -66,14 +66,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="QtSettings">
     <QtModules>core;gui;network;widgets</QtModules>
-    <QtInstall>$(DefaultQtVersion)</QtInstall>
+    <QtInstall>6.9.0_msvc2022_64</QtInstall>
     <QtLUpdateOptions>
     </QtLUpdateOptions>
     <QtQMLDebugEnable>false</QtQMLDebugEnable>
+    <QtBuildConfig>release</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
+    <QtDeployAddToolsDirToPath>true</QtDeployAddToolsDirToPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtModules>core;gui;network;widgets</QtModules>
-    <QtInstall>6.8.0_msvc2022_64</QtInstall>
+    <QtInstall>6.9.0_msvc2022_64</QtInstall>
     <QtLUpdateOptions>
     </QtLUpdateOptions>
     <QtQMLDebugEnable>false</QtQMLDebugEnable>
@@ -82,14 +85,18 @@
     <QtDeployAddToolsDirToPath>true</QtDeployAddToolsDirToPath>
     <QtDeployEnv>
     </QtDeployEnv>
+    <QtDeploy>true</QtDeploy>
+    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugRemote|x64'" Label="QtSettings">
     <QtModules>core;gui;network;widgets</QtModules>
-    <QtBuildConfig>debug</QtBuildConfig>
-    <QtInstall>$(DefaultQtVersion)</QtInstall>
+    <QtBuildConfig>release</QtBuildConfig>
+    <QtInstall>6.9.0_msvc2022_64</QtInstall>
     <QtLUpdateOptions>
     </QtLUpdateOptions>
     <QtQMLDebugEnable>false</QtQMLDebugEnable>
+    <QtDeploy>true</QtDeploy>
+    <QtDeployAddToolsDirToPath>true</QtDeployAddToolsDirToPath>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
